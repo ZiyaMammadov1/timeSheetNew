@@ -5,9 +5,11 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using TimeSheet.DatabaseContext;
 using TimeSheet.Dtos.UserDto;
 using TimeSheet.Entities;
+using TimeSheet.SecondDtos.UserDtos;
 using VoltekApi.Helper;
 
 namespace TimeSheet.Controllers
@@ -83,12 +85,90 @@ namespace TimeSheet.Controllers
                 createdTime = DateTime.UtcNow,
                 departmentId = UserPostDto.departmentId,
                 dateOfBirthday = UserPostDto.dateOfBirthday,
-                age = 24
-                
+                age = DateTime.UtcNow.Year - UserPostDto.dateOfBirthday.Year
+
             };
             _context.Users.Add(newUser);
             _context.SaveChanges();
             return getFinishObject = new Answer<UserGetDto>(201, "User created", null);
+        }
+
+
+        [HttpPost]
+        [Route("users")]
+        public ActionResult<Answer<UserGetDto>> CreateUserFromList(List<SecondUserPostDto> users)
+        {
+            List<User> UserList = new List<User>();
+
+
+            foreach (var user in users)
+            {
+                Position position = _context.Positions.FirstOrDefault(x => x.name == user.position);
+
+                if (position == null)
+                {
+                    Position newPosition = new Position()
+                    {
+                        name = user.position,
+                        isDeleted = false
+                    };
+
+                    _context.Positions.Add(newPosition);
+                    _context.SaveChanges();
+
+                    position = _context.Positions.FirstOrDefault(x => x.name == newPosition.name);
+
+                }
+
+
+
+
+                Department department = _context.Departments.FirstOrDefault(x => x.name == user.department);
+
+
+
+                if (department == null)
+                {
+                    Department newDepartment = new Department()
+                    {
+                        name = user.department,
+                        isDeleted = false
+                    };
+
+                    _context.Departments.Add(newDepartment);
+                    _context.SaveChanges();
+
+                    department = _context.Departments.FirstOrDefault(x => x.name == newDepartment.name);
+
+                }
+
+                User newUser = new User()
+                {
+                    uuid = Guid.NewGuid().ToString(),
+                    cid = user.cid,
+                    email = user.email,
+                    fin = user.fin.ToLower(),
+                    firstName = user.firstName,
+                    lastName = user.lastName,
+                    Password = Hashing.ToSHA256(user.fin.ToLower()),
+                    fullName = user.firstName + " " + user.lastName,
+                    positionId = position.id,
+                    isDeleted = false,
+                    createdTime = DateTime.UtcNow,
+                    departmentId = department.id,
+                    age = DateTime.UtcNow.Year - user.dateOfBirthday.Year
+                };
+
+                if (newUser.fin != null && newUser.email != null)
+                    UserList.Add(newUser);
+
+            }
+
+            _context.Users.AddRange(UserList);
+            _context.SaveChanges();
+
+            return getFinishObject = new Answer<UserGetDto>(201, "Users created", null);
+
         }
 
         [HttpPut]

@@ -15,6 +15,7 @@ namespace TimeSheet.Dtos.UserDto
         public DateTime createdTime { get; set; }
         public int departmentId { get; set; }
         public DateTime dateOfBirthday { get; set; }
+        public string imageUrl { get; set; }
 
     }
 
@@ -27,8 +28,8 @@ namespace TimeSheet.Dtos.UserDto
             RuleFor(x => x.password).NotEmpty().MaximumLength(150);
             RuleFor(x => x.firstName).NotEmpty().MaximumLength(50);
             RuleFor(x => x.lastName).NotEmpty().MaximumLength(50);
-            RuleFor(x => x.positionId).NotEmpty().GreaterThanOrEqualTo(0);
-            RuleFor(x => x.departmentId).NotEmpty().GreaterThanOrEqualTo(0);
+            RuleFor(x => x.positionId).NotEmpty().GreaterThan(0);
+            RuleFor(x => x.departmentId).NotEmpty().GreaterThan(0);
             RuleFor(x => x.dateOfBirthday).NotEmpty();
         }
     }
