@@ -15,7 +15,7 @@ namespace TimeSheet.Dtos.UserDto
         public DateTime createdTime { get; set; }
         public int departmentId { get; set; }
         public DateTime dateOfBirthday { get; set; }
-        public string imageUrl { get; set; }
+        public string photo { get; set; }
 
     }
 

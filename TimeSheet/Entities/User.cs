@@ -18,7 +18,7 @@ namespace TimeSheet.Entities
         public DateTime dateOfBirthday { get; set; }
         public int age { get; set; }
         public DateTime createdTime { get; set; }
-        public string imageUrl { get; set; }
+        public string photo { get; set; }
 
         public int positionId { get; set; }
         public Position Position { get; set; }

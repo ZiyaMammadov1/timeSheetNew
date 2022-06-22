@@ -12,6 +12,7 @@ namespace TimeSheet.Dtos.UserDto
         public string firstName { get; set; }
         public string lastName { get; set; }
         public int positionId { get; set; }
+        public string photo { get; set; }
     }
 
     public class UserUpdateDtoValidator : AbstractValidator<UserUpdateDto>

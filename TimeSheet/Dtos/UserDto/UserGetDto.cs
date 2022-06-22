@@ -15,5 +15,7 @@ namespace TimeSheet.Dtos.UserDto
         public int positionId { get; set; }
         public PositionGetDto Position { get; set; }
         public DateTime createdTime { get; set; }
+        public string photo { get; set; }
+
     }
 }

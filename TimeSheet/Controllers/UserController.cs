@@ -95,7 +95,7 @@ namespace TimeSheet.Controllers
 
 
         [HttpPost]
-        [Route("users")]
+        [Route("addlist")]
         public ActionResult<Answer<UserGetDto>> CreateUserFromList(List<SecondUserPostDto> users)
         {
             List<User> UserList = new List<User>();

@@ -38,7 +38,8 @@ namespace TimeSheet.Controllers
                 ProjectGetDto projectGetDto = new ProjectGetDto()
                 {
                     id = project.uuid,
-                    name = project.name
+                    name = project.name,
+                    code = project.code
                 };
                 ProjectGetList.Add(projectGetDto);
             }
@@ -62,7 +63,8 @@ namespace TimeSheet.Controllers
                 ProjectGetDto projectGetDto = new ProjectGetDto()
                 {
                     id = exist.uuid,
-                    name = exist.name
+                    name = exist.name,
+                    code = exist.code
                 };
                 return getFinishObject = new Answer<ProjectGetDto>(200, "Ok", new List<ProjectGetDto> { projectGetDto });
             }
@@ -80,11 +82,38 @@ namespace TimeSheet.Controllers
             {
                 uuid = Guid.NewGuid().ToString(),
                 isDeleted = false,
-                name = ProjectPostDto.name
+                name = ProjectPostDto.name,
+                code = ProjectPostDto.code
             };
             _context.Projects.Add(newProject);
             _context.SaveChanges();
             return getFinishObject = new Answer<ProjectGetDto>(201, "Project created", null);
+
+        }
+
+        [HttpPost]
+        [Route("addlist")]
+        public ActionResult <Answer<ProjectGetDto>> CreateProjectFromList(List<ProjectPostDto> projects)
+        {
+            List<Project> newProjects = new List<Project>();
+
+            foreach (var project in projects)
+            {
+                Project projectList = new Project()
+                {
+                    uuid= Guid.NewGuid().ToString(),
+                    name = project.name,
+                    code = project.code,
+                    isDeleted = false
+                };
+
+                newProjects.Add(projectList);
+            }
+
+            _context.Projects.AddRange(newProjects);
+            _context.SaveChanges();
+
+            return getFinishObject = new Answer<ProjectGetDto>(201, "Projects created", null);
 
         }
 
@@ -99,6 +128,7 @@ namespace TimeSheet.Controllers
             }
 
             exist.name = ProjectUpdateDto.name;
+            exist.code = ProjectUpdateDto.code;
 
             _context.SaveChanges();
 
