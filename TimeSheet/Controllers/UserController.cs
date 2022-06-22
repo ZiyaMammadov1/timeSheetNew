@@ -110,7 +110,8 @@ namespace TimeSheet.Controllers
                     Position newPosition = new Position()
                     {
                         name = user.position,
-                        isDeleted = false
+                        isDeleted = false,
+                        uuid = Guid.NewGuid().ToString()
                     };
 
                     _context.Positions.Add(newPosition);
@@ -132,7 +133,8 @@ namespace TimeSheet.Controllers
                     Department newDepartment = new Department()
                     {
                         name = user.department,
-                        isDeleted = false
+                        isDeleted = false,
+                        uuid = Guid.NewGuid().ToString()
                     };
 
                     _context.Departments.Add(newDepartment);
